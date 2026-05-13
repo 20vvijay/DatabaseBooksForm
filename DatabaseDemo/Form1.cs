@@ -19,13 +19,13 @@ namespace DatabaseDemo
             con.Open();
             MySqlCommand cmd = new MySqlCommand();
             cmd.Connection = con;
-            string SQL = ""; // write your SQL query to get the ISBNs from the database
+            string SQL = "SELECT ISBN FROM Books;"; // write your SQL query to get the ISBNs from the database
             cmd.CommandText = SQL;
-            MySqlDataReader reader = cmd.;// select which type of query to execute (Scalar, Reader, NonQuery)
+            MySqlDataReader reader = cmd.ExecuteReader();// select which type of query to execute (Scalar, Reader, NonQuery)
             while (reader.Read())
             {
                 string ISBN = reader.GetString("ISBN");
-                // add each read item to your combo box
+                cboISBN.Items.Add(ISBN);// add each read item to your combo box
             }
             con.Close();
         }
@@ -37,21 +37,21 @@ namespace DatabaseDemo
             con.Open();
             MySqlCommand cmd = new MySqlCommand();
             cmd.Connection = con;
-            string SQL = "";
+            string SQL = "SELECT ISBN WHERE name = @name;";
             cmd.CommandText = SQL;
             string ISBN = cboISBN.Text;
             // add the parameter
             // To use parameters in the SQL substitute the parameter with @identifier.
             //WHERE name = @name
             //After the command text has been assigned tell C# to replace the parameter with a variable/value
-            //cmd.Parameters.AddWithValue("@name", txtName.Text);
+            cmd.Parameters.AddWithValue("@name", ISBN);
             
             MySqlDataReader reader = cmd.ExecuteReader();
             while (reader.Read())
             {
-                string title = //
-                int price = //
-                string type = //
+                string title = reader.GetString("Title");
+                int price = reader.GetInt32("Price");
+                string type = reader.GetString("Type");
                 txtTitle.Text = title;
                 txtPrice.Text = price.ToString("£0.00");
                 txtType.Text = type;
@@ -61,7 +61,7 @@ namespace DatabaseDemo
         }
         private MySqlConnection connect()
         {
-            MySqlConnection con = new MySqlConnection("server=;user=;password=;database="); // fill in your details
+            MySqlConnection con = new MySqlConnection("Server=192.168.35.129;uid = 20VVijayaruban;pwd = 36ys0JVr;database=20VVijayaruban_Books"); // fill in your details
             return con;
 
         }
